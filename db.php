@@ -1,22 +1,26 @@
 <?php
 class database
 {
-   protected function connect()
+  private $db_host = "localhost";
+  private $db_user = "root";
+  private $db_name = "stud_proj";
+  public $conn;
+
+
+   public function connect()
    {
-       $db_host = "localhost";
-       $db_user = "root";
-       $db_name = "stud_proj";
+       $this->conn = null;
        try {
 
-         $db = new PDO("mysql:host=$db_host;dbname=$db_name", $db_user, '');
+         $this->conn = new PDO("mysql:host=$this->db_host;dbname=$this->db_name", $this->db_user, '');
          // set the PDO error mode to exception
-         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+         $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
          echo "Prisijugimas pavyko ";
 
        } catch (PDOException $e) {
            echo "Nepavyko prisijungti prie DB " . $e->getMessage();
        }
-
+       return $this->conn;
    }
 
 }

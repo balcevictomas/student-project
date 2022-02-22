@@ -1,6 +1,7 @@
 <?php
 include "header.php";
-
+$myclass = new myClass();
+$myclass->insertProjects();
 ?>
 
 <div class="form-group center" >
@@ -9,7 +10,7 @@ include "header.php";
         <label for="projectName"><b>Project name</b></label>
         <input type="text" placeholder="Project name" name="projectName" required >
         <label for="text"><b>Number of groups</b></label>
-        <input type="text" placeholder="Number of groups" name="numberGropups" required >
+        <input type="number" placeholder="Number of groups" name="numberGroups" required >
         <label for="number"><b>Students per group</b></label>
         <input type="number" placeholder="Students per group" name="studentsPerGroup" required >
 

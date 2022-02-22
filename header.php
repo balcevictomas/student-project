@@ -1,7 +1,6 @@
 <?php
 include "myclass.php";
-$myclass = new myClass();
-$myclass->fetchProjects();
+
 
 ?>
 <!doctype html>
