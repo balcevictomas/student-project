@@ -15,7 +15,7 @@ class database
          $this->conn = new PDO("mysql:host=$this->db_host;dbname=$this->db_name", $this->db_user, '');
          // set the PDO error mode to exception
          $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-         echo "Prisijugimas pavyko ";
+       //  echo "Prisijugimas pavyko ";
 
        } catch (PDOException $e) {
            echo "Nepavyko prisijungti prie DB " . $e->getMessage();

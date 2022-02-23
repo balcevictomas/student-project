@@ -37,6 +37,34 @@ include "db.php";
       }
     }
   }
+  public function readProjects()
+  {
+    if (isset($_GET['id']))
+    {
+      $id = $_GET['id'];
+      //echo $id;
+      $query = "SELECT * FROM projects where id = {$id}";
+      $stmt = $this->connect()->prepare($query);
+      $stmt->execute();
+      return $stmt;
+    }
+    else
+    {
+      echo "Nepasirinktas projektas";
+    }
+  }
+  public function readStudents()
+  {
+    if (isset($_GET['id']))
+    {
+      $id = $_GET['id'];
+      $query = "SELECT * FROM students where project={$id}";
+      $stmt = $this->connect()->prepare($query);
+      $stmt->execute();
+      return $stmt;
+    }
+
+  }
 
 }
 
