@@ -32,7 +32,7 @@ $num = $fetch->rowCount();
                     <td><?php echo $result['nog']; ?></td>
                     <td><?php echo $result['spg']; ?></td>
                     <td><a href="edit_project.php?id=<?php echo $result['id']; ?>">Edit</a></td>
-                    <td>Delete</td>
+                    <td><a href="delete.php?id=<?php echo $result['id']; ?>">Delete</a></td>
 
                 </tr>
             <?php

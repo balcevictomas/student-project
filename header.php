@@ -1,5 +1,6 @@
 <?php
 include "myclass.php";
+include "delete_class.php";
 
 
 ?>

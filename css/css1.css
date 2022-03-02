@@ -127,3 +127,12 @@ ul.a {
 table, th, td {
     border: 1px solid;
 }
+.s-table
+{
+    display: flex;
+    flex-flow: row wrap;
+}
+.display-block
+{
+    display: grid;
+}
