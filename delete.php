@@ -26,7 +26,8 @@ if (isset($_GET['id'])) {
 
         if (isset($_POST['delete'])) {
 
-            $delete = new deleteClass($id);
+            $delete = new deleteClass();
+            $deleteProject=$delete->deleteProject($id);
             header("Location: index.php");
 
         } else {
