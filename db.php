@@ -13,6 +13,8 @@ class database
        try {
 
          $this->conn = new PDO("mysql:host=$this->db_host;dbname=$this->db_name", $this->db_user, '');
+         $db = $this->conn->prepare("CREATE SCHEMA IF NOT EXISTS $this->db_name");
+         $db->execute();
          // set the PDO error mode to exception
          $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
        //  echo "Prisijugimas pavyko ";

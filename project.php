@@ -59,7 +59,10 @@ if ($num_projects == 1) {
                                     }
                                     ?>
                                     <td>
-                                        <a href="project.php?id=<?=$project['id']?>&delete-stud=<?=$result['id']?>">Delete</a>
+                                        <a href="project.php?id=<?= $project['id'] ?>&delete-stud=<?= $result['id'] ?>">Delete</a>
+                                    </td>
+                                    <td>
+                                        <a href="project.php?id=<?= $project['id'] ?>&edit-stud=<?= $result['id'] ?>">Edit</a>
                                     </td>
 
 
@@ -101,8 +104,8 @@ if ($num_projects == 1) {
 
                                         <tr>
                                             <td>
-                                                <form method="post" action="">
-                                                <select>
+
+                                                <select name="selectStudent">
                                                     <?php
                                                     if ($n_s_w_g > 0): ?>
 
@@ -123,11 +126,12 @@ if ($num_projects == 1) {
                                                     ?>
 
                                                 </select>
-                                                    <input type="submit" value="Submit the form"/>
-                                                </form>
+
+
                                             </td>
                                         </tr>
                                     <?php }
+
                                     $left = 0;
                                     $students = 0;
                                 } else {
@@ -135,8 +139,8 @@ if ($num_projects == 1) {
                                         ?>
                                         <tr>
                                             <td>
-                                                <form method="post" action="">
-                                                <select>
+
+                                                <select name="selectStudent">
                                                     <?php if ($n_s_w_g > 0): ?>
                                                         <option value="" selected="selected" hidden="hidden">Choose
                                                             here
@@ -151,7 +155,7 @@ if ($num_projects == 1) {
                                                     <?php
 
                                                     foreach ($student_0 as $stud_0) {
-                                                        echo '<option value="1">' . $stud_0['namesurname'] . '</option>';
+                                                        echo '<option value="' . $stud_0['id'] . '">' . $stud_0['namesurname'] . '</option>';
                                                     }
                                                     ?>
                                                 </select>
@@ -174,8 +178,7 @@ if ($num_projects == 1) {
 
 
                     </div>
-                    <input type="submit" value="Asign student"/>
-                    </form>
+
 
                     <?php
                 } else {
@@ -184,6 +187,7 @@ if ($num_projects == 1) {
                     <a href="add-student.php?project-id=<?= $project['id'] ?>" class="button">Add student</a>
                     <?php
                 }
+
 
                 ?>
 
@@ -198,10 +202,43 @@ if ($num_projects == 1) {
     echo "No project";
 }
 if (isset($_GET['delete-stud'])):
-$deleteclass = new deleteClass();
-$deleteclass -> deleteStudent($project['id'], $_GET['delete-stud']);
+    $deleteclass = new deleteClass();
+    $deleteclass->deleteStudent($project['id'], $_GET['delete-stud']);
 
 endif;
+
+if (isset($_GET['edit-stud'])) {
+    $readEditableStudent = $myclass->editableStudent();
+    $checkEditableStudent = $readEditableStudent->rowCount();
+    if ($checkEditableStudent = 0):
+        die();
+    endif;
+    foreach ($readEditableStudent->fetchAll(PDO::FETCH_ASSOC) as $estud)
+    {
+        $estudent['namesurname'] = $estud['namesurname'];
+        $estudent['group'] = $estud['s_group'];
+    }
+
+    ?>
+    <div class="form-group center">
+        <form method="post" class="form-container form1">
+
+            <label for="projectName"><b>Name and surname</b></label>
+            <input type="text" value="<?=$estudent['namesurname']?>" name="studentNameSurname" required>
+            <label for="projectName"><b>Group</b></label>
+            <input type="text" value="<?=$estudent['group']?>" name="group" required>
+            <button name="update-student" type="submit" class="btn">Update student</button>
+
+        </form>
+    </div>
+
+<?php }
+if (isset($_POST['update-student']))
+{
+    $myclass->updateStudent();
+
+}
+
 
 ob_end_flush();
 ?>

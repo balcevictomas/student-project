@@ -10,7 +10,7 @@ class myClass extends database
 
     }
 
-    public function fetchProjects()
+    public function fetchProjects()  // fetches all existing projects
     {
         $stmt = $this->connect()->prepare("SELECT * FROM projects");
         $stmt->execute();
@@ -19,7 +19,7 @@ class myClass extends database
         return $stmt;
     }
 
-    public function insertProjects()
+    public function insertProjects() // creates new projects
     {
         //$stmt=$this->connect()->prepare("")
         if (isset($_POST['submit_reg'])) {
@@ -38,7 +38,7 @@ class myClass extends database
         }
     }
 
-    public function readProjects()
+    public function readProjects() // reads individual project
     {
         if (isset($_GET['id'])) {
             $id = $_GET['id'];
@@ -48,11 +48,11 @@ class myClass extends database
             $stmt->execute();
             return $stmt;
         } else {
-            echo "Nepasirinktas projektas";
+            echo "Projects wasn`t selected";
         }
     }
 
-    public function readProject($id)
+   /* public function readProject($id)
     {
         if (isset($_GET['id']) and $id == $_GET['id']) {
 
@@ -64,9 +64,9 @@ class myClass extends database
         } else {
             echo "Nepasirinktas projektas";
         }
-    }
+    }*/
 
-    public function readStudents()
+    public function readStudents()  // read all students by project id
     {
 
 
@@ -84,7 +84,7 @@ class myClass extends database
 
     }
 
-    public function fetchStudentsGroup($s_id)
+    public function fetchStudentsGroup($s_id) // fetch students by project id and their group in project
     {
         if (isset($_GET['id'])) {
             $id = $_GET['id'];
@@ -96,7 +96,7 @@ class myClass extends database
 
     }
 
-    public function fetchStudentWithoutGroup()
+    public function fetchStudentWithoutGroup() // fetch students by project id without group
     {
         if (isset($_GET['id'])) {
             $id = $_GET['id'];
@@ -108,19 +108,9 @@ class myClass extends database
 
     }
 
-    public function fetchStudentWithoutGroup1()
-    {
-        if (isset($_GET['id']) or isset($_GET['project-id'])) {
-            $id = $_GET['id'];
-            $query = "SELECT * FROM students where project={$id} and s_group=0";
-            $stmt = $this->connect()->prepare($query);
-            $stmt->execute();
-            return $stmt;
-        }
 
-    }
 
-    public function getStudentsInProject($id)
+    public function getStudentsInProject($id) // later by nog and spg, we will check how much students are allowed to be in the project
     {
         $query = "SELECT nog, spg FROM projects where id={$id}";
         $stmt = $this->connect()->prepare($query);
@@ -128,14 +118,14 @@ class myClass extends database
         return $stmt;
     }
 
-    public function addStudent($id)
+    public function addStudent($id) // add students
     {
 
         if (isset($_GET['project-id']) and $_GET['project-id'] == $id):
             $checkAllowedStudents = $this->getStudentsInProject($id);
             $studentsAllowed = 0;
             foreach ($checkAllowedStudents->fetchAll(PDO::FETCH_ASSOC) as $studAllowed) {
-                $studentsAllowed = intval($studAllowed['nog']) * intval($studAllowed['spg']);
+                $studentsAllowed = intval($studAllowed['nog']) * intval($studAllowed['spg']); // number of groups in project and students per group multication
             }
 
             $checkStudent = $this->readStudents()->rowCount();
@@ -151,6 +141,42 @@ class myClass extends database
                         </script>';
             endif;
         endif;
+    }
+    public function editableStudent() // get info about editable student
+    {
+        if (isset($_GET['id']) AND isset($_GET['edit-stud']))
+        {
+            $project_id = $_GET['id'];
+            $student_id = $_GET['edit-stud'];
+            $query = "SELECT * FROM students where project={$project_id} and id = {$student_id}";
+            $stmt = $this->connect()->prepare($query);
+            $stmt->execute();
+            return $stmt;
+        }
+    }
+    public function updateStudent() // update students info
+    {
+        if (isset($_GET['id']) AND isset($_GET['edit-stud']))
+        {
+            $project_id = $_GET['id'];
+            $student_id = $_GET['edit-stud'];
+            $newNameSurname = $_POST['studentNameSurname'];
+            $newGroup = $_POST['group'];
+            if (empty($newNameSurname) AND empty($newGroup))
+            {
+                echo '<script type="text/javascript">
+                        alert("Field is empty");
+                        </script>';
+            }
+            else
+            {
+                $query = "UPDATE students SET namesurname='{$newNameSurname}', s_group={$newGroup} where project={$project_id} and id={$student_id}";
+                $stmt = $this->connect()->prepare($query);
+                $stmt->execute();
+                header('Location: project.php?id='.$project_id.'');
+            }
+
+        }
     }
 
 }
